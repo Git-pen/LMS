@@ -1,0 +1,42 @@
+# Compiled Object files
+*.o
+*.obj
+obj/
+
+# Executables
+library_system
+*.exe
+*.out
+
+# Build directories
+build/
+bin/
+
+# Data files (optional - uncomment to exclude user data)
+# data/*.txt
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Core dumps
+core
+core.*
+
+# Debug files
+*.dSYM/
+*.su
