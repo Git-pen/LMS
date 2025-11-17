@@ -3,8 +3,14 @@
 #include "Config.h"
 #include <iostream>
 #include <limits>
-#include <termios.h>
-#include <unistd.h>
+
+#ifdef _WIN32
+    #include <conio.h>
+    #include <windows.h>
+#else
+    #include <termios.h>
+    #include <unistd.h>
+#endif
 
 using namespace std;
 
@@ -14,7 +20,11 @@ AuthManager* auth = nullptr;
 
 // Utility functions
 void clearScreen() {
-    cout << "\033[2J\033[1;1H";
+    #ifdef _WIN32
+        system("cls");
+    #else
+        cout << "\033[2J\033[1;1H";
+    #endif
 }
 
 void pressEnter() {
@@ -49,16 +59,34 @@ string getPasswordInput(string prompt) {
     string password;
     cout << prompt;
     
-    termios oldt;
-    tcgetattr(STDIN_FILENO, &oldt);
-    termios newt = oldt;
-    newt.c_lflag &= ~ECHO;
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    
-    getline(cin, password);
-    
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    cout << "\n";
+    #ifdef _WIN32
+        // Windows implementation
+        char ch;
+        while ((ch = _getch()) != '\r') {
+            if (ch == '\b') {
+                if (!password.empty()) {
+                    password.pop_back();
+                    cout << "\b \b";
+                }
+            } else {
+                password += ch;
+                cout << '*';
+            }
+        }
+        cout << "\n";
+    #else
+        // Unix/Linux implementation
+        termios oldt;
+        tcgetattr(STDIN_FILENO, &oldt);
+        termios newt = oldt;
+        newt.c_lflag &= ~ECHO;
+        tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+        
+        getline(cin, password);
+        
+        tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
+        cout << "\n";
+    #endif
     
     return password;
 }

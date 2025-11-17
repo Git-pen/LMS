@@ -2,12 +2,26 @@
 #include "../Config.h"
 #include <fstream>
 #include <sstream>
-#include <sys/stat.h>
 #include <iostream>
 
+#ifdef _WIN32
+    #include <direct.h>
+    #include <io.h>
+    #define mkdir(dir, mode) _mkdir(dir)
+    #define access _access
+    #define F_OK 0
+#else
+    #include <sys/stat.h>
+    #include <unistd.h>
+#endif
+
 bool FileHandler::fileExists(string filename) {
-    struct stat buffer;
-    return (stat(filename.c_str(), &buffer) == 0);
+    #ifdef _WIN32
+        return (_access(filename.c_str(), F_OK) == 0);
+    #else
+        struct stat buffer;
+        return (stat(filename.c_str(), &buffer) == 0);
+    #endif
 }
 
 bool FileHandler::createFile(string filename) {
@@ -20,7 +34,11 @@ bool FileHandler::createFile(string filename) {
 }
 
 bool FileHandler::createDirectory(string dirname) {
-    return mkdir(dirname.c_str(), 0777) == 0 || fileExists(dirname);
+    #ifdef _WIN32
+        return _mkdir(dirname.c_str()) == 0 || fileExists(dirname);
+    #else
+        return mkdir(dirname.c_str(), 0777) == 0 || fileExists(dirname);
+    #endif
 }
 
 vector<string> FileHandler::readLines(string filename) {

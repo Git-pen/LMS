@@ -2,6 +2,15 @@
 
 A comprehensive console-based library management system built with custom data structures in C++.
 
+## 🪟 Windows & Linux Compatible ✅
+
+**This project works on both Windows and Linux!**
+- ✅ **Windows 10/11** - Full support with VSCode Terminal
+- ✅ **Linux/Unix** - Native support
+- ✅ Cross-platform code with conditional compilation
+- 📖 See [WINDOWS_SETUP.md](WINDOWS_SETUP.md) for Windows-specific instructions
+- 📖 See [README_WINDOWS.md](README_WINDOWS.md) for quick Windows guide
+
 ## 🚀 Features
 
 ### Advanced Data Structures
